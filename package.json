@@ -1,0 +1,16 @@
+{
+  "name": "pixelarena-online-battle",
+  "version": "1.0.0",
+  "description": "A browser-based pixel arena multiplayer battle game built with Node.js, Express, and Socket.IO.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "check": "node --check server.js"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  }
+}

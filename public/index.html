@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10131f">
+  <title>PixelArena — Online Battle</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand-mark">PA</div>
+      <div class="brand-copy"><h1>PIXEL<span>ARENA</span></h1><p>RETRO BATTLE // ONLINE</p></div>
+      <div class="online"><i></i><span id="onlineCount">0</span> IN ARENA</div>
+    </header>
+
+    <section id="lobby" class="lobby panel">
+      <div class="hero-copy">
+        <p class="eyebrow">READY PLAYER ONE?</p>
+        <h2>ENTER THE<br><span>ARENA.</span></h2>
+        <p class="subcopy">Lock in. Aim true. Climb the leaderboard.</p>
+      </div>
+      <form id="joinForm" class="join-form">
+        <label for="playerName">YOUR CALLSIGN</label>
+        <input id="playerName" maxlength="16" placeholder="e.g. PixelNinja" autocomplete="nickname" required>
+        <label>CHOOSE YOUR COLOR</label>
+        <div class="colors" id="colors">
+          <button type="button" class="swatch selected" data-color="#62e6a7" style="--swatch:#62e6a7" aria-label="Mint"></button>
+          <button type="button" class="swatch" data-color="#ffcc66" style="--swatch:#ffcc66" aria-label="Gold"></button>
+          <button type="button" class="swatch" data-color="#ff6b8a" style="--swatch:#ff6b8a" aria-label="Pink"></button>
+          <button type="button" class="swatch" data-color="#79a8ff" style="--swatch:#79a8ff" aria-label="Blue"></button>
+          <button type="button" class="swatch" data-color="#c58bff" style="--swatch:#c58bff" aria-label="Purple"></button>
+          <button type="button" class="swatch" data-color="#ff914d" style="--swatch:#ff914d" aria-label="Orange"></button>
+          <button type="button" class="swatch" data-color="#f472d0" style="--swatch:#f472d0" aria-label="Hot pink"></button>
+          <button type="button" class="swatch" data-color="#54d6e8" style="--swatch:#54d6e8" aria-label="Cyan"></button>
+          <button type="button" class="swatch" data-color="#b7e36b" style="--swatch:#b7e36b" aria-label="Lime"></button>
+          <button type="button" class="swatch" data-color="#f4f4f5" style="--swatch:#f4f4f5" aria-label="White"></button>
+          <button type="button" class="swatch" data-color="#ff5d5d" style="--swatch:#ff5d5d" aria-label="Red"></button>
+          <button type="button" class="swatch" data-color="#a78bfa" style="--swatch:#a78bfa" aria-label="Lavender"></button>
+          <button type="button" class="swatch" data-color="#34d399" style="--swatch:#34d399" aria-label="Green"></button>
+          <button type="button" class="swatch" data-color="#f59e0b" style="--swatch:#f59e0b" aria-label="Amber"></button>
+          <button type="button" class="swatch" data-color="#60a5fa" style="--swatch:#60a5fa" aria-label="Sky blue"></button>
+        </div>
+        <label for="roomCode">ROOM CODE / FRIEND INVITE <span class="optional-label">(OPTIONAL)</span></label>
+        <input id="roomCode" maxlength="5" placeholder="Blank = join random public lobby" autocomplete="off" spellcheck="false">
+        <label for="roomType">LOBBY TYPE</label>
+        <select id="roomType"><option value="private" selected>Private — invite friends</option><option value="public">Public — anyone can join</option></select>
+        <label for="roomLimit">ROOM SIZE</label>
+        <select id="roomLimit"><option value="2">2 players</option><option value="4">4 players</option><option value="6">6 players</option><option value="8" selected>8 players (MAX)</option></select>
+        <button class="primary" type="submit">JOIN BATTLE <span>↗</span></button>
+        <button id="createRoomBtn" class="ghost room-create" type="button">CREATE ROOM +</button>
+        <p id="joinError" class="error" aria-live="polite"></p>
+      </form>
+      <div class="hero-art" aria-hidden="true">
+        <div class="sun"></div><div class="grid-floor"></div>
+        <div class="pixel-bot bot-one"><b></b><i></i></div>
+        <div class="pixel-bot bot-two"><b></b><i></i></div>
+        <div class="spark s1">✦</div><div class="spark s2">+</div><div class="spark s3">✧</div>
+      </div>
+      <div class="controls-preview"><span>MOVE <b>W A S D</b></span><span>AIM <b>MOUSE</b></span><span>FIRE <b>CLICK / SPACE</b></span><span>DASH <b>SHIFT</b></span></div>
+    </section>
+
+    <section id="game" class="game-layout hidden">
+      <div class="game-column">
+        <div class="game-heading"><div><p class="eyebrow">LIVE MATCH <span id="roomBadge"></span> <span id="matchTimer">03:00</span></p><h2>THE BATTLE ZONE</h2></div><div class="game-actions"><button id="inviteBtn" class="ghost hidden" type="button">COPY INVITE LINK</button><button id="leaveBtn" class="ghost">LEAVE ↗</button></div></div>
+        <div class="canvas-wrap"><canvas id="arena" width="960" height="600" aria-label="PixelArena battle field"></canvas>
+          <div id="hitFlash" class="hit-flash"></div>
+          <div class="canvas-hint">WASD MOVE · CLICK TO FIRE</div>
+        </div>
+        <div class="mobile-controls"><span>WASD / ARROWS: MOVE</span><span>MOUSE / TOUCH: AIM + FIRE</span></div>
+      </div>
+      <aside class="sidebar">
+        <div class="panel stat-panel"><p class="eyebrow">YOUR STATUS</p><div class="player-label"><span id="selfDot"></span><strong id="selfName">PLAYER</strong></div><div class="hp-label"><span>SHIELD</span><b id="hpText">100%</b></div><div class="hp-track"><div id="hpBar"></div></div><div class="stat-grid"><div><span>KILLS</span><b id="kills">0</b></div><div><span>SCORE</span><b id="score">0</b></div></div></div>
+        <div class="panel leaderboard"><p class="eyebrow">TOP FIGHTERS</p><ol id="leaderboard"><li class="empty">Waiting for fighters…</li></ol></div>
+        <div class="panel feed"><p class="eyebrow">ARENA FEED</p><div id="feedItems"><p class="empty">Battle log ready.</p></div></div>
+        <div class="panel help"><p class="eyebrow">CONTROLS</p><p><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> Move</p><p><kbd>SHIFT</kbd> Dash</p><p><kbd>CLICK</kbd> Fire</p><p><kbd>SPACE</kbd> Fire</p></div>
+      </aside>
+    </section>
+    <section id="matchResults" class="match-results hidden" role="dialog" aria-modal="true" aria-labelledby="resultsTitle">
+      <div class="results-card panel"><p class="eyebrow">MATCH COMPLETE</p><h2 id="resultsTitle">FINAL SCOREBOARD</h2><p id="nextRoundText">Next round starts in 15 seconds.</p>
+        <div class="results-table-wrap"><table class="results-table"><thead><tr><th>#</th><th>PLAYER</th><th>KILLS</th><th>DEATHS</th><th>SCORE</th></tr></thead><tbody id="resultsRows"></tbody></table></div>
+      </div>
+    </section>
+    <div id="respawnNotice" class="respawn-notice hidden" aria-live="polite">RESPAWNING IN 5…</div>
+    <footer><span>PIXELARENA v1.0</span><span>PLAY FAIR. HAVE FUN.</span><span>BUILT FOR THE BROWSER</span></footer>
+  </main>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/game.js"></script>
+</body>
+</html>
